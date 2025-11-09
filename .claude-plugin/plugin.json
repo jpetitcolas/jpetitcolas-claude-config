@@ -1,0 +1,9 @@
+{
+  "name": "jpetitcolas-claude-config",
+  "version": "1.0.0",
+  "description": "Shared Claude Code configuration for jpetitcolas projects",
+  "author": {
+    "name": "jpetitcolas"
+  },
+  "license": "UNLICENSED"
+}

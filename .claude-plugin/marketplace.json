@@ -1,0 +1,15 @@
+{
+  "name": "jpetitcolas-claude-config",
+  "owner": {
+    "name": "jpetitcolas"
+  },
+  "description": "Shared Claude Code configuration for jpetitcolas projects",
+  "plugins": [
+    {
+      "name": "jpetitcolas-claude-config",
+      "source": ".",
+      "description": "Shared Claude Code configuration for jpetitcolas projects",
+      "version": "1.0.0"
+    }
+  ]
+}
