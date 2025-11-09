@@ -4,12 +4,13 @@ Shared Claude Code configuration plugin for jpetitcolas projects.
 
 ## Installation
 
-### From Git Repository (Recommended)
+### From Marketplace (Recommended)
 
-This is a private repository. Ensure you have Git access configured (SSH keys or credentials), then install:
+Add the marketplace, then install the plugin:
 
 ```bash
-claude plugins install https://github.com/jpetitcolas/jpetitcolas-claude-config.git
+claude plugin marketplace add git@github.com:jpetitcolas/jpetitcolas-claude-config.git
+claude plugins install jpetitcolas-claude-config
 ```
 
 ### From Local Path

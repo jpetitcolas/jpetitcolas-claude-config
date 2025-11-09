@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "jpetitcolas-claude-config",
-      "source": ".",
+      "source": "./",
       "description": "Shared Claude Code configuration for jpetitcolas projects",
       "version": "1.0.0"
     }
