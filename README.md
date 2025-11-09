@@ -2,6 +2,11 @@
 
 Shared Claude Code configuration plugin for jpetitcolas projects.
 
+## Prerequisites
+
+- **Node.js** (v18 or higher) - Required for hook execution
+- **pnpm** (v10 or higher) - Package manager for hook dependencies
+
 ## Installation
 
 ### From Marketplace (Recommended)
@@ -18,31 +23,59 @@ claude plugins install jpetitcolas-claude-config
 For development or testing:
 
 ```bash
+# First, install hook dependencies
+cd /path/to/jpetitcolas-claude-config/hooks
+pnpm install
+
+# Then install the plugin
 claude plugins install /path/to/jpetitcolas-claude-config
 ```
 
 ## What's Included
 
-This plugin provides the structure for:
+### Auto-Registering Hooks
+**No manual configuration required** - hooks activate automatically when plugin is enabled:
 
-- **Slash Commands**: Add custom commands in the `commands/` directory
-- **Subagents**: Add specialized agents in `agents/` for specific tasks
-- **Skills**: Add model-invoked capabilities in `skills/`
-- **Hooks**: Optionally add event handlers by creating a `hooks/` directory
+- **skill-activation-prompt** (UserPromptSubmit hook): Analyzes user prompts and proactively suggests relevant skills before Claude processes requests
+
+### Skills
+
+- **skill-developer**: Meta-skill for creating and managing Claude Code skills
+- **semantic-commits**: Guidance for creating semantic commit messages
+
+### Slash Commands
+- **semantic-commit**: Creates semantic commit messages following conventional commit standards
+
+### Future Additions
+- **Subagents**: Specialized agents for specific tasks (coming soon)
 
 ## Usage
 
-After installation, your custom commands, agents, hooks, and skills will be available across all projects where this plugin is installed.
+After installation, everything works automatically:
 
-To verify installation:
+- **Hooks** auto-register and activate (no `.claude/settings.json` configuration needed)
+- **Skills** are available via the `Skill` tool
+- **Commands** are available as `/semantic-commit`
 
+The skill-activation hook will proactively suggest relevant skills based on your prompts, helping you follow best practices automatically.
+
+### Plugin Management
+
+Verify installation:
 ```bash
 claude plugins list
 ```
 
-To enable/disable the plugin:
-
+Enable/disable the plugin:
 ```bash
 claude plugins disable jpetitcolas-claude-config
 claude plugins enable jpetitcolas-claude-config
 ```
+
+### How It Works
+
+When you type a prompt like "Let's add a new API endpoint", the UserPromptSubmit hook automatically:
+1. Analyzes your prompt for keywords and intent patterns
+2. Matches against skill trigger rules
+3. Suggests relevant skills (e.g., "backend-dev-guidelines")
+4. Claude sees these suggestions and can invoke the skill before responding

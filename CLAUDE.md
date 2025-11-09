@@ -2,7 +2,7 @@
 
 This is a **Claude Code plugin** repository that serves as a shared configuration for jpetitcolas' projects. It provides reusable commands, agents, and skills that can be installed across multiple projects via Claude's plugin system.
 
-**Important**: This is NOT a code project with build steps or dependencies. It's a collection of markdown files and JSON configuration that extend Claude Code's capabilities.
+**Important**: This is primarily a configuration repository. Commands, agents, and skills are pure markdown/JSON. The `hooks/` directory contains TypeScript code with dependencies managed via pnpm.
 
 ## Architecture
 
@@ -15,25 +15,36 @@ This is a **Claude Code plugin** repository that serves as a shared configuratio
 - **commands/** - Slash commands (`.md` files with YAML frontmatter)
 - **agents/** - Specialized subagents (`.md` files with YAML frontmatter)
 - **skills/** - Model-invoked capabilities (directories containing `SKILL.md`)
-- **hooks/** - (Optional) Event handlers with `hooks.json` and shell scripts
+- **hooks/** - Event handlers that auto-register via `hooks.json` (TypeScript + shell scripts)
+
+## Prerequisites
+
+- **Node.js** (v18 or higher) - Required for hook execution
+- **pnpm** (v10 or higher) - Package manager for hook dependencies
 
 ## Testing Changes
 
 Since this is a plugin system:
 
-1. **Install locally during development**:
+1. **Install hook dependencies** (first time only):
+   ```bash
+   cd /home/jpetitcolas/dev/jpetitcolas-claude-config/hooks
+   pnpm install
+   ```
+
+2. **Install plugin locally during development**:
    ```bash
    claude plugins install /home/jpetitcolas/dev/jpetitcolas-claude-config
    ```
 
-2. **Verify installation**:
+3. **Verify installation**:
    ```bash
    claude plugins list
    ```
 
-3. **Test commands/agents/skills** in a Claude Code session
+4. **Test commands/agents/skills/hooks** in a Claude Code session
 
-4. **Reload after changes**: Disable and re-enable the plugin:
+5. **Reload after changes**: Disable and re-enable the plugin:
    ```bash
    claude plugins disable jpetitcolas-claude-config
    claude plugins enable jpetitcolas-claude-config
