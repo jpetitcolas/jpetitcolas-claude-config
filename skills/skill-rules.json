@@ -47,6 +47,43 @@
                     "commit.*?(and|then).*?push"
                 ]
             }
+        },
+        "testing-guidelines": {
+            "type": "domain",
+            "enforcement": "suggest",
+            "priority": "high",
+            "description": "Testing best practices for JavaScript/TypeScript with Vitest, including time mocking, focused assertions, avoiding duplicated tests, and focusing on behaviors over implementation details",
+            "promptTriggers": {
+                "keywords": [
+                    "test",
+                    "tests",
+                    "testing",
+                    "unit test",
+                    "integration test",
+                    "vitest",
+                    "mock",
+                    "mocking",
+                    "assertion",
+                    "it.each",
+                    "test coverage",
+                    "test file",
+                    "test behavior",
+                    "implementation detail",
+                    "brittle test"
+                ],
+                "intentPatterns": [
+                    "(write|create|add).*?(test|tests)",
+                    "(fix|update|refactor).*?(test|tests)",
+                    "test.*?(fail|failing|error)",
+                    "how.*?test",
+                    "should.*?test",
+                    "mock.*?(date|time|function)",
+                    "(avoid|remove).*?duplicate.*?test",
+                    "test.*?(guideline|best practice|pattern)",
+                    "test.*?(behavior|implementation)",
+                    "(brittle|fragile).*?test"
+                ]
+            }
         }
     },
     "notes": {
