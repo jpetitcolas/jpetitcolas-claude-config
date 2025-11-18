@@ -79,3 +79,27 @@ When you type a prompt like "Let's add a new API endpoint", the UserPromptSubmit
 2. Matches against skill trigger rules
 3. Suggests relevant skills (e.g., "backend-dev-guidelines")
 4. Claude sees these suggestions and can invoke the skill before responding
+
+## Project-Level Configuration
+
+**Important:** Project-level settings override user-level settings. If you have a project with its own `.claude/settings.json`, you may need to enable the plugin for that specific project.
+
+### Enable Plugin in a Specific Project
+
+To enable this plugin in a project without committing the configuration, add it to your project's `.claude/settings.local.json`:
+
+```json
+{
+  "enabledPlugins": {
+    "jpetitcolas-claude-config@jpetitcolas-claude-config": true
+  }
+}
+```
+
+**Why this is needed:**
+- User-level plugins (`~/.claude/settings.json`) are enabled globally
+- But project-level settings (`.claude/settings.json`) can override this
+- Using `.claude/settings.local.json` keeps the configuration local (not committed)
+
+**Example:**
+If you install this plugin globally but it's not triggering in a specific project, check if that project has `.claude/settings.json` that doesn't include this plugin in its `enabledPlugins` list.
