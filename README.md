@@ -11,12 +11,22 @@ Shared Claude Code configuration plugin for jpetitcolas projects.
 
 ### From Marketplace (Recommended)
 
-Add the marketplace, then install the plugin:
+1. Navigate to your home directory and start Claude:
+   ```bash
+   cd ~
+   claude
+   ```
 
-```bash
-claude plugin marketplace add git@github.com:jpetitcolas/jpetitcolas-claude-config.git
-claude plugins install jpetitcolas-claude-config
-```
+2. Use the `/plugins` command to add the marketplace:
+   - Type `/plugins`
+   - Select "Add marketplace"
+   - Enter: `https://github.com/jpetitcolas/jpetitcolas-claude-config.git`
+
+3. Install the plugin:
+   - Type `/plugins`
+   - Select "Browse and install plugins"
+   - Select the `jpetitcolas-claude-config` marketplace
+   - Choose the `jpetitcolas-claude-config` plugin to install it
 
 ### From Local Path
 
