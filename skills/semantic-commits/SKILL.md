@@ -1,6 +1,6 @@
 ---
 name: semantic-commits
-description: Write human-focused, semantic git commit messages
+description: Write human-focused, semantic git commit messages. Use when creating commits, writing commit messages, committing code changes, or preparing to push. Covers commit format, motivation sections, impact descriptions, and avoiding conventional commit prefixes like feat/fix/chore.
 ---
 
 # Semantic Commit Messages
