@@ -1,99 +1,42 @@
 ---
 name: skill-developer
-description: Create and manage Claude Code skills following Anthropic best practices. Use when creating new skills, modifying skill-rules.json, understanding trigger patterns, working with hooks, debugging skill activation, or implementing progressive disclosure. Covers skill structure, YAML frontmatter, trigger types (keywords, intent patterns, file paths, content patterns), enforcement levels (block, suggest, warn), hook mechanisms (UserPromptSubmit, PreToolUse), session tracking, and the 500-line rule.
+description: Create and manage Claude Code skills following Anthropic best practices. Use when creating new skills, understanding skill structure, writing SKILL.md files, or implementing progressive disclosure. Covers YAML frontmatter, the 500-line rule, rich descriptions for auto-activation, and reference file patterns.
 ---
 
 # Skill Developer Guide
 
 ## Purpose
 
-Comprehensive guide for creating and managing skills in Claude Code with auto-activation system, following Anthropic's official best practices including the 500-line rule and progressive disclosure pattern.
+Guide for creating skills in Claude Code using the native auto-activation system, following Anthropic's best practices including the 500-line rule and progressive disclosure pattern.
 
 ## When to Use This Skill
 
 Automatically activates when you mention:
 - Creating or adding skills
-- Modifying skill triggers or rules
 - Understanding how skill activation works
-- Debugging skill activation issues
-- Working with skill-rules.json
-- Hook system mechanics
-- Claude Code best practices
+- Claude Code skill best practices
 - Progressive disclosure
 - YAML frontmatter
 - 500-line rule
 
 ---
 
-## System Overview
+## How Skills Work (Native System)
 
-### Hook Architecture
+Claude Code skills are **model-invoked** — Claude autonomously decides when to use them based on your request and the skill's description.
 
-**UserPromptSubmit Hook** (Proactive Suggestions)
-- **File**: `.claude/hooks/skill-activation-prompt.ts`
-- **Trigger**: BEFORE Claude sees user's prompt
-- **Purpose**: Suggest relevant skills based on keywords + intent patterns
-- **Method**: Injects formatted reminder as context (stdout → Claude's input)
-- **Use Cases**: Topic-based skills, implicit work detection
+### Auto-Discovery
 
-### Configuration File
+Skills are automatically discovered from:
+- Personal Skills (`~/.config/claude-code/skills/`)
+- Project Skills (`.claude/skills/`)
+- Plugin Skills (installed plugins' `skills/` directories)
 
-**Location**: `.claude/skills/skill-rules.json`
+### Trigger Mechanism
 
-Defines:
-- All skills and their trigger conditions
-- Enforcement levels (block, suggest, warn)
-- File path patterns (glob)
-- Content detection patterns (regex)
-- Skip conditions (session tracking, file markers, env vars)
+The **only native trigger** is the `description` field in YAML frontmatter. Claude uses semantic matching to determine relevance.
 
----
-
-## Skill Types
-
-### 1. Guardrail Skills
-
-**Purpose:** Enforce critical best practices that prevent errors
-
-**Characteristics:**
-- Type: `"guardrail"`
-- Enforcement: `"block"`
-- Priority: `"critical"` or `"high"`
-- Block file edits until skill used
-- Prevent common mistakes (column names, critical errors)
-- Session-aware (don't repeat nag in same session)
-
-**Examples:**
-- `database-verification` - Verify table/column names before Prisma queries
-- `frontend-dev-guidelines` - Enforce React/TypeScript patterns
-
-**When to Use:**
-- Mistakes that cause runtime errors
-- Data integrity concerns
-- Critical compatibility issues
-
-### 2. Domain Skills
-
-**Purpose:** Provide comprehensive guidance for specific areas
-
-**Characteristics:**
-- Type: `"domain"`
-- Enforcement: `"suggest"`
-- Priority: `"high"` or `"medium"`
-- Advisory, not mandatory
-- Topic or domain-specific
-- Comprehensive documentation
-
-**Examples:**
-- `backend-dev-guidelines` - Node.js/Express/TypeScript patterns
-- `frontend-dev-guidelines` - React/TypeScript best practices
-- `error-tracking` - Sentry integration guidance
-
-**When to Use:**
-- Complex systems requiring deep knowledge
-- Best practices documentation
-- Architectural patterns
-- How-to guides
+**Key insight:** The richer your description (with concrete trigger terms), the better Claude matches it to user requests.
 
 ---
 
@@ -101,13 +44,13 @@ Defines:
 
 ### Step 1: Create Skill File
 
-**Location:** `.claude/skills/{skill-name}/SKILL.md`
+**Location:** `skills/{skill-name}/SKILL.md`
 
 **Template:**
 ```markdown
 ---
 name: my-new-skill
-description: Brief description including keywords that trigger this skill. Mention topics, file types, and use cases. Be explicit about trigger terms.
+description: Brief description including keywords that trigger this skill. Use when [specific scenarios]. Covers [topics, patterns, use cases].
 ---
 
 # My New Skill
@@ -122,282 +65,139 @@ Specific scenarios and conditions
 The actual guidance, documentation, patterns, examples
 ```
 
-**Best Practices:**
-- ✅ **Name**: Lowercase, hyphens, gerund form (verb + -ing) preferred
-- ✅ **Description**: Include ALL trigger keywords/phrases (max 1024 chars)
-- ✅ **Content**: Under 500 lines - use reference files for details
-- ✅ **Examples**: Real code examples
-- ✅ **Structure**: Clear headings, lists, code blocks
+### Step 2: Write a Rich Description
 
-### Step 2: Add to skill-rules.json
+The description is your **only trigger mechanism**. Make it count:
 
-See [SKILL_RULES_REFERENCE.md](SKILL_RULES_REFERENCE.md) for complete schema.
+```yaml
+# ❌ Too vague - won't trigger reliably
+description: Help with testing
 
-**Basic Template:**
-```json
-{
-  "my-new-skill": {
-    "type": "domain",
-    "enforcement": "suggest",
-    "priority": "medium",
-    "promptTriggers": {
-      "keywords": ["keyword1", "keyword2"],
-      "intentPatterns": ["(create|add).*?something"]
-    }
-  }
-}
+# ✅ Rich with triggers - activates appropriately
+description: Testing best practices for JavaScript/TypeScript with Vitest. Use when writing tests, creating test files, fixing failing tests, mocking time or functions. Covers vi.useFakeTimers, vi.stubEnv, it.each, hard-coded assertions, behavior-focused testing.
 ```
 
-### Step 3: Test Triggers
+**Guidelines:**
+- Max 1024 characters
+- Include action phrases: "Use when...", "Covers..."
+- List specific keywords users might mention
+- Name tools, libraries, patterns explicitly
 
-**Test UserPromptSubmit:**
-```bash
-echo '{"session_id":"test","prompt":"your test prompt"}' | \
-  npx tsx .claude/hooks/skill-activation-prompt.ts
-```
+### Step 3: Follow Best Practices
 
-### Step 4: Refine Patterns
-
-Based on testing:
-- Add missing keywords
-- Refine intent patterns to reduce false positives
-- Adjust file path patterns
-- Test content patterns against actual files
-
-### Step 5: Follow Anthropic Best Practices
-
-✅ Keep SKILL.md under 500 lines
-✅ Use progressive disclosure with reference files
-✅ Add table of contents to reference files > 100 lines
-✅ Write detailed description with trigger keywords
-✅ Test with 3+ real scenarios before documenting
-✅ Iterate based on actual usage
+- **Name**: Lowercase, hyphens, max 64 characters
+- **Content**: Under 500 lines — use reference files for details
+- **Examples**: Include real code examples
+- **Structure**: Clear headings, lists, code blocks
 
 ---
 
-## Enforcement Levels
+## The 500-Line Rule
 
-### BLOCK (Critical Guardrails)
+Skills should be under 500 lines. For comprehensive topics:
 
-- Physically prevents Edit/Write tool execution
-- Exit code 2 from hook, stderr → Claude
-- Claude sees message and must use skill to proceed
-- **Use For**: Critical mistakes, data integrity, security issues
+1. Keep `SKILL.md` as an overview/quick reference
+2. Create reference files for detailed content
+3. Link to reference files from the main skill
 
-**Example:** Database column name verification
-
-### SUGGEST (Recommended)
-
-- Reminder injected before Claude sees prompt
-- Claude is aware of relevant skills
-- Not enforced, just advisory
-- **Use For**: Domain guidance, best practices, how-to guides
-
-**Example:** Frontend development guidelines
-
-### WARN (Optional)
-
-- Low priority suggestions
-- Advisory only, minimal enforcement
-- **Use For**: Nice-to-have suggestions, informational reminders
-
-**Rarely used** - most skills are either BLOCK or SUGGEST.
-
----
-
-## Skip Conditions & User Control
-
-### 1. Session Tracking
-
-**Purpose:** Don't nag repeatedly in same session
-
-**How it works:**
-- First edit → Hook blocks, updates session state
-- Second edit (same session) → Hook allows
-- Different session → Blocks again
-
-**Note:** Session state can be tracked via hook implementation if needed
-
-### 2. File Markers
-
-**Purpose:** Permanent skip for verified files
-
-**Marker:** `// @skip-validation`
-
-**Usage:**
-```typescript
-// @skip-validation
-import { PrismaService } from './prisma';
-// This file has been manually verified
+**Example structure:**
 ```
-
-**NOTE:** Use sparingly - defeats the purpose if overused
-
-### 3. Environment Variables
-
-**Purpose:** Emergency disable, temporary override
-
-**Global disable:**
-```bash
-export SKIP_SKILL_GUARDRAILS=true  # Disables ALL PreToolUse blocks
-```
-
-**Skill-specific:**
-```bash
-export SKIP_DB_VERIFICATION=true
-export SKIP_ERROR_REMINDER=true
+skills/my-skill/
+├── SKILL.md              # Overview (< 500 lines)
+├── DETAILED_GUIDE.md     # Deep dive
+├── PATTERNS.md           # Pattern library
+└── TROUBLESHOOTING.md    # Common issues
 ```
 
 ---
 
-## Testing Checklist
+## Progressive Disclosure Pattern
 
-When creating a new skill, verify:
+**Principle:** Start concise, provide paths to depth.
 
-- [ ] Skill file created in `.claude/skills/{name}/SKILL.md`
-- [ ] Proper frontmatter with name and description
-- [ ] Entry added to `skill-rules.json`
-- [ ] Keywords tested with real prompts
-- [ ] Intent patterns tested with variations
-- [ ] File path patterns tested with actual files
-- [ ] Content patterns tested against file contents
-- [ ] Block message is clear and actionable (if guardrail)
-- [ ] Skip conditions configured appropriately
-- [ ] Priority level matches importance
-- [ ] No false positives in testing
-- [ ] No false negatives in testing
-- [ ] Performance is acceptable (<100ms or <200ms)
-- [ ] JSON syntax validated: `jq . skill-rules.json`
-- [ ] **SKILL.md under 500 lines** ⭐
-- [ ] Reference files created if needed
-- [ ] Table of contents added to files > 100 lines
+```markdown
+## Quick Reference
+
+[Essential information here - enough for common cases]
 
 ---
 
 ## Reference Files
 
-For detailed information on specific topics, see:
-
-### [TRIGGER_TYPES.md](TRIGGER_TYPES.md)
-Complete guide to all trigger types:
-- Keyword triggers (explicit topic matching)
-- Intent patterns (implicit action detection)
-- File path triggers (glob patterns)
-- Content patterns (regex in files)
-- Best practices and examples for each
-- Common pitfalls and testing strategies
-
-### [SKILL_RULES_REFERENCE.md](SKILL_RULES_REFERENCE.md)
-Complete skill-rules.json schema:
-- Full TypeScript interface definitions
-- Field-by-field explanations
-- Complete guardrail skill example
-- Complete domain skill example
-- Validation guide and common errors
-
-### [HOOK_MECHANISMS.md](HOOK_MECHANISMS.md)
-Deep dive into hook internals:
-- UserPromptSubmit flow (detailed)
-- PreToolUse flow (detailed)
-- Exit code behavior table (CRITICAL)
-- Session state management
-- Performance considerations
-
-### [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-Comprehensive debugging guide:
-- Skill not triggering (UserPromptSubmit)
-- PreToolUse not blocking
-- False positives (too many triggers)
-- Hook not executing at all
-- Performance issues
-
-### [PATTERNS_LIBRARY.md](PATTERNS_LIBRARY.md)
-Ready-to-use pattern collection:
-- Intent pattern library (regex)
-- File path pattern library (glob)
-- Content pattern library (regex)
-- Organized by use case
-- Copy-paste ready
-
-### [ADVANCED.md](ADVANCED.md)
-Future enhancements and ideas:
-- Dynamic rule updates
-- Skill dependencies
-- Conditional enforcement
-- Skill analytics
-- Skill versioning
-
----
-
-## Quick Reference Summary
-
-### Create New Skill (5 Steps)
-
-1. Create `.claude/skills/{name}/SKILL.md` with frontmatter
-2. Add entry to `.claude/skills/skill-rules.json`
-3. Test with `npx tsx` commands
-4. Refine patterns based on testing
-5. Keep SKILL.md under 500 lines
-
-### Trigger Types
-
-- **Keywords**: Explicit topic mentions
-- **Intent**: Implicit action detection
-- **File Paths**: Location-based activation
-- **Content**: Technology-specific detection
-
-See [TRIGGER_TYPES.md](TRIGGER_TYPES.md) for complete details.
-
-### Enforcement
-
-- **BLOCK**: Exit code 2, critical only
-- **SUGGEST**: Inject context, most common
-- **WARN**: Advisory, rarely used
-
-### Skip Conditions
-
-- **Session tracking**: Automatic (prevents repeated nags)
-- **File markers**: `// @skip-validation` (permanent skip)
-- **Env vars**: `SKIP_SKILL_GUARDRAILS` (emergency disable)
-
-### Anthropic Best Practices
-
-✅ **500-line rule**: Keep SKILL.md under 500 lines
-✅ **Progressive disclosure**: Use reference files for details
-✅ **Table of contents**: Add to reference files > 100 lines
-✅ **One level deep**: Don't nest references deeply
-✅ **Rich descriptions**: Include all trigger keywords (max 1024 chars)
-✅ **Test first**: Build 3+ evaluations before extensive documentation
-✅ **Gerund naming**: Prefer verb + -ing (e.g., "processing-pdfs")
-
-### Troubleshoot
-
-Test hooks manually:
-```bash
-# UserPromptSubmit
-echo '{"prompt":"test"}' | npx tsx .claude/hooks/skill-activation-prompt.ts
+For detailed information:
+- [DETAILED_GUIDE.md](DETAILED_GUIDE.md) - Complete walkthrough
+- [PATTERNS.md](PATTERNS.md) - Pattern library
 ```
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for complete debugging guide.
+**Guidelines:**
+- Add table of contents to reference files > 100 lines
+- Keep nesting one level deep (don't chain references)
+- Each file should be self-contained
 
 ---
 
-## Related Files
+## Testing Your Skill
 
-**Configuration:**
-- `.claude/skills/skill-rules.json` - Master configuration
-- `.claude/settings.json` - Hook registration
+1. **Install/reload the plugin** containing the skill
+2. **Test with natural prompts** that should trigger it
+3. **Verify Claude uses the Skill tool** when appropriate
+4. **Refine the description** based on activation patterns
 
-**Hooks:**
-- `.claude/hooks/skill-activation-prompt.ts` - UserPromptSubmit
-
-**All Skills:**
-- `.claude/skills/*/SKILL.md` - Skill content files
+If Claude isn't using your skill when expected, enhance the description with more specific trigger keywords.
 
 ---
 
-**Skill Status**: COMPLETE - Restructured following Anthropic best practices ✅
-**Line Count**: < 500 (following 500-line rule) ✅
-**Progressive Disclosure**: Reference files for detailed information ✅
+## Checklist
 
-**Next**: Create more skills, refine patterns based on usage
+When creating a new skill:
+
+- [ ] Skill file created in `skills/{name}/SKILL.md`
+- [ ] YAML frontmatter with `name` and `description`
+- [ ] Description includes trigger keywords and "Use when..." phrases
+- [ ] Content under 500 lines
+- [ ] Reference files for detailed content (if needed)
+- [ ] Real code examples included
+- [ ] Tested with 3+ real prompts
+
+---
+
+## YAML Frontmatter Reference
+
+```yaml
+---
+name: skill-name           # Required: lowercase, hyphens, max 64 chars
+description: Rich text...  # Required: max 1024 chars, trigger keywords
+allowed-tools:             # Optional: restrict which tools can be used
+  - Bash
+  - Write
+  - Read
+---
+```
+
+**Fields:**
+- `name`: Identifier (lowercase, hyphens only)
+- `description`: Trigger text for semantic matching
+- `allowed-tools`: Optional security restriction
+
+---
+
+## Examples of Good Descriptions
+
+**Testing skill:**
+```yaml
+description: Testing best practices for JavaScript/TypeScript with Vitest. Use when writing tests, creating test files, fixing failing tests, mocking time or functions. Covers vi.useFakeTimers, vi.stubEnv, it.each, hard-coded assertions, behavior-focused testing.
+```
+
+**Commit message skill:**
+```yaml
+description: Write human-focused, semantic git commit messages. Use when creating commits, writing commit messages, committing code changes, or preparing to push. Covers commit format, motivation sections, impact descriptions.
+```
+
+**API documentation skill:**
+```yaml
+description: Generate OpenAPI/Swagger documentation for REST APIs. Use when documenting endpoints, creating API specs, or setting up Swagger UI. Covers path definitions, request/response schemas, authentication.
+```
+
+---
+
+**Line Count**: < 200 (well under 500-line rule)

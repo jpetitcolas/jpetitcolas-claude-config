@@ -1,23 +1,17 @@
 # jpetitcolas-claude-config
 
-Shared Claude Code configuration plugin for jpetitcolas projects.
-
-## Prerequisites
-
-- **Node.js** (v18 or higher) - Required for hook execution
-- **pnpm** (v10 or higher) - Package manager for hook dependencies
+Shared Claude Code configuration plugin for jpetitcolas projects. Provides reusable skills that auto-activate based on context.
 
 ## Installation
 
-### From Marketplace (Recommended)
+### From Marketplace
 
-1. Navigate to your home directory and start Claude:
+1. Start Claude:
    ```bash
-   cd ~
    claude
    ```
 
-2. Use the `/plugins` command to add the marketplace:
+2. Add the marketplace:
    - Type `/plugins`
    - Select "Add marketplace"
    - Enter: `https://github.com/jpetitcolas/jpetitcolas-claude-config.git`
@@ -25,78 +19,49 @@ Shared Claude Code configuration plugin for jpetitcolas projects.
 3. Install the plugin:
    - Type `/plugins`
    - Select "Browse and install plugins"
-   - Select the `jpetitcolas-claude-config` marketplace
-   - Choose the `jpetitcolas-claude-config` plugin to install it
+   - Choose `jpetitcolas-claude-config`
 
-### From Local Path
-
-For development or testing:
+### From Local Path (Development)
 
 ```bash
-# First, install hook dependencies
-cd /path/to/jpetitcolas-claude-config/hooks
-pnpm install
-
-# Then install the plugin
 claude plugins install /path/to/jpetitcolas-claude-config
 ```
 
 ## What's Included
 
-### Auto-Registering Hooks
-**No manual configuration required** - hooks activate automatically when plugin is enabled:
+### Skills (Auto-Activated)
 
-- **skill-activation-prompt** (UserPromptSubmit hook): Analyzes user prompts and proactively suggests relevant skills before Claude processes requests
+Skills are automatically invoked by Claude based on your prompt context:
 
-### Skills
+| Skill | Purpose |
+|-------|---------|
+| **semantic-commits** | Human-focused commit message guidelines (no feat/fix prefixes) |
+| **testing-guidelines** | Vitest best practices: time mocking, assertions, behavior-focused testing |
+| **skill-developer** | Guide for creating Claude Code skills with 500-line rule |
 
-- **skill-developer**: Meta-skill for creating and managing Claude Code skills
-- **semantic-commits**: Guidance for creating semantic commit messages
+### How Skills Work
 
-### Slash Commands
-- **semantic-commit**: Creates semantic commit messages following conventional commit standards
+Claude automatically uses skills when your prompt matches their description. No manual invocation needed.
 
-### Future Additions
-- **Subagents**: Specialized agents for specific tasks (coming soon)
+**Examples:**
+- "Let's commit these changes" → triggers `semantic-commits`
+- "Write tests for this function" → triggers `testing-guidelines`
+- "How do I create a new skill?" → triggers `skill-developer`
 
-## Usage
+## Plugin Management
 
-After installation, everything works automatically:
-
-- **Hooks** auto-register and activate (no `.claude/settings.json` configuration needed)
-- **Skills** are available via the `Skill` tool
-- **Commands** are available as `/semantic-commit`
-
-The skill-activation hook will proactively suggest relevant skills based on your prompts, helping you follow best practices automatically.
-
-### Plugin Management
-
-Verify installation:
 ```bash
+# Verify installation
 claude plugins list
-```
 
-Enable/disable the plugin:
-```bash
+# Enable/disable
 claude plugins disable jpetitcolas-claude-config
 claude plugins enable jpetitcolas-claude-config
 ```
 
-### How It Works
-
-When you type a prompt like "Let's add a new API endpoint", the UserPromptSubmit hook automatically:
-1. Analyzes your prompt for keywords and intent patterns
-2. Matches against skill trigger rules
-3. Suggests relevant skills (e.g., "backend-dev-guidelines")
-4. Claude sees these suggestions and can invoke the skill before responding
-
 ## Project-Level Configuration
 
-**Important:** Project-level settings override user-level settings. If you have a project with its own `.claude/settings.json`, you may need to enable the plugin for that specific project.
-
-### Enable Plugin in a Specific Project
-
-To enable this plugin in a project without committing the configuration, add it to your project's `.claude/settings.local.json`:
+If a project has `.claude/settings.json`, enable this plugin in `.claude/settings.local.json`:
 
 ```json
 {
@@ -105,11 +70,3 @@ To enable this plugin in a project without committing the configuration, add it 
   }
 }
 ```
-
-**Why this is needed:**
-- User-level plugins (`~/.claude/settings.json`) are enabled globally
-- But project-level settings (`.claude/settings.json`) can override this
-- Using `.claude/settings.local.json` keeps the configuration local (not committed)
-
-**Example:**
-If you install this plugin globally but it's not triggering in a specific project, check if that project has `.claude/settings.json` that doesn't include this plugin in its `enabledPlugins` list.

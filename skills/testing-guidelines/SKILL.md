@@ -1,6 +1,6 @@
 ---
 name: testing-guidelines
-description: Testing best practices for JavaScript/TypeScript with Vitest, including time mocking, focused assertions, avoiding duplicated tests, and focusing on behaviors over implementation details
+description: Testing best practices for JavaScript/TypeScript with Vitest. Use when writing tests, creating test files, fixing failing tests, mocking time or functions, or reviewing test code. Covers vi.useFakeTimers, vi.stubEnv, it.each for data variations, hard-coded assertions, avoiding duplicated tests, and focusing on behaviors over implementation details.
 ---
 
 # Testing Guidelines
