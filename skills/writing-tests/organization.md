@@ -1,6 +1,6 @@
 # Testing Patterns - Test Organization
 
-Patterns for organizing test suites using nested describe blocks. Part of the [Testing Guidelines](../../SKILL.md) skill.
+Patterns for organizing test suites using nested describe blocks.
 
 ## Table of Contents
 

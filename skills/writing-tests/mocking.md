@@ -1,6 +1,6 @@
 # Testing Patterns - Mocking and Async
 
-Patterns for mocking dependencies, testing async functions, and handling errors. Part of the [Testing Guidelines](../../SKILL.md) skill.
+Patterns for mocking dependencies, testing async functions, and handling errors.
 
 ## Table of Contents
 

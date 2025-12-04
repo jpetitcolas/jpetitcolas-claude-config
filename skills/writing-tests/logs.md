@@ -1,6 +1,6 @@
 # Testing Patterns - Logs and Observability
 
-Patterns for testing logs, log levels, structured logging, and observability. Part of the [Testing Guidelines](../../SKILL.md) skill.
+Patterns for testing logs, log levels, structured logging, and observability.
 
 ## Table of Contents
 

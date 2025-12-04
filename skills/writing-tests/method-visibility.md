@@ -1,6 +1,6 @@
 # Testing Patterns - Method Visibility
 
-Patterns for testing private, protected, and static methods. Part of the [Testing Guidelines](../../SKILL.md) skill.
+Patterns for testing private, protected, and static methods.
 
 ## Table of Contents
 
