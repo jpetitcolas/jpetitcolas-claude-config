@@ -3,12 +3,6 @@ name: writing-tests
 description: Provides testing best practices for JavaScript/TypeScript with Vitest. Use when writing tests, creating test files, fixing failing tests, mocking time or functions, or reviewing test code. Covers vi.useFakeTimers, vi.stubEnv, it.each for data variations, hard-coded assertions, avoiding duplicated tests, and focusing on behaviors over implementation details.
 ---
 
-# Testing Guidelines
-
-Testing best practices for JavaScript/TypeScript projects using Vitest.
-
-## Patterns
-
 - [Time Mocking](time-mocking.md) - Never use `new Date()`, always mock with `vi.useFakeTimers()`
 - [Hard-Coded Values](hard-coded-values.md) - Expected values should be explicit, not computed
 - [Avoiding Duplication](avoiding-duplication.md) - Each test should verify a unique behavior

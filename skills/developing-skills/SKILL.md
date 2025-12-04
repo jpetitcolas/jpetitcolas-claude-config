@@ -3,8 +3,6 @@ name: developing-skills
 description: Creates and manages Claude Code skills following Anthropic best practices. Use when creating new skills, understanding skill structure, writing SKILL.md files, or implementing progressive disclosure. Covers YAML frontmatter, the 500-line rule, rich descriptions for auto-activation, and reference file patterns.
 ---
 
-# Developing Skills
-
 **Location:** `skills/{skill-name}/SKILL.md`
 
 ## Skill Template
