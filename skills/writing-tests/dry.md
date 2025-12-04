@@ -1,6 +1,6 @@
 # Testing Patterns - DRY (Don't Repeat Yourself)
 
-Patterns for extracting and reusing shared test data to avoid duplication. Part of the [Testing Guidelines](../../SKILL.md) skill.
+Patterns for extracting and reusing shared test data to avoid duplication.
 
 ## Table of Contents
 

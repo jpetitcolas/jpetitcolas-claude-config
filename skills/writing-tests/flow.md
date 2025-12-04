@@ -1,6 +1,6 @@
 # Testing Patterns - Test Ordering and Flow
 
-Patterns for organizing tests to match source code structure and logic flow. Part of the [Testing Guidelines](../../SKILL.md) skill.
+Patterns for organizing tests to match source code structure and logic flow.
 
 ## Table of Contents
 
