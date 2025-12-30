@@ -29,13 +29,14 @@ claude plugins install /path/to/jpetitcolas-claude-config
 
 ## What's Included
 
-### Agents (Auto-Delegated)
+### Agents
 
-Agents are specialized Claude instances that Claude automatically delegates to for complex tasks:
+Agents are specialized Claude instances that handle complex tasks. Claude automatically invokes them when appropriate, or you can request them explicitly:
 
 | Agent | Purpose | Model |
 |-------|---------|-------|
 | **test-verifier** | Automatically verifies tests pass after code changes with deep failure analysis | Opus 4.5 |
+| **format-checker** | Autonomous formatting & linting agent that actively fixes code quality issues | Haiku 4.5 |
 
 **How test-verifier works:**
 - Auto-triggers when code changes in `apps/` or `packages/` directories
@@ -43,6 +44,14 @@ Agents are specialized Claude instances that Claude automatically delegates to f
 - Deep root cause analysis for test failures
 - Always invokes `writing-tests` skill for best practices validation
 - Fully generic across all Turbo+pnpm monorepo projects
+
+**How format-checker works:**
+- Runs automated fixes with `pnpm format:fix` (Biome, Prettier, ESLint, etc.)
+- Analyzes remaining linting errors
+- **Actively fixes issues** using Read + Edit tools (replaces `any` types, fixes bracket notation, etc.)
+- Iterates up to 3 times until all issues resolved
+- Reports what it fixed or why it needs manual intervention
+- Generic across any project with `format:fix` and `format:check` scripts
 
 ### Skills (Auto-Activated)
 
