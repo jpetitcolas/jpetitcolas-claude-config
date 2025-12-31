@@ -1,6 +1,6 @@
 ---
 name: test-verifier
-description: Automatically verify tests pass after code changes in Turbo monorepo projects. Invoked when code is modified in apps/ or packages/ directories, before commits, or when test verification is needed. Analyzes test failures with deep reasoning and provides actionable guidance.
+description: PROACTIVELY invoke this agent after EVERY code modification in apps/ or packages/ directories to verify tests pass. Use immediately after Edit/Write tool calls that modify .ts, .tsx, .js, or .jsx files. Also invoke before commits and when fixing bugs. Analyzes test failures with deep reasoning and provides actionable guidance.
 model: opus
 ---
 
