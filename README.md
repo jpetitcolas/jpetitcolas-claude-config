@@ -4,24 +4,16 @@ Shared Claude Code configuration plugin for jpetitcolas projects. Provides reusa
 
 ## Installation
 
-### From Marketplace
+### Quick Setup
 
-1. Start Claude:
-   ```bash
-   claude
-   ```
+Start Claude and run these commands:
 
-2. Add the marketplace:
-   - Type `/plugins`
-   - Select "Add marketplace"
-   - Enter: `https://github.com/jpetitcolas/jpetitcolas-claude-config.git`
+```
+/plugin marketplace add https://github.com/jpetitcolas/jpetitcolas-claude-config.git
+/plugin install jpetitcolas-claude-config
+```
 
-3. Install the plugin:
-   - Type `/plugins`
-   - Select "Browse and install plugins"
-   - Choose `jpetitcolas-claude-config`
-
-### From Local Path (Development)
+### Local Development
 
 ```bash
 claude plugins install /path/to/jpetitcolas-claude-config
